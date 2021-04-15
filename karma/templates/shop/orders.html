@@ -1,0 +1,111 @@
+{% extends 'base.html'%}
+{% block title %}Karma Shop{% endblock %}
+
+{% block body%}
+
+	<!-- Start Banner Area -->
+	<section class="banner-area organic-breadcrumb">
+		<div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>Orders</h1>
+					<nav class="d-flex align-items-center">
+						<a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="category.html">Orders</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End Banner Area -->
+
+	<!--================Order Details Area =================-->
+	<section class="order_details section_gap">
+		<div class="container">
+			<h3 class="title_confirmation">Orders</h3>
+            {% for order in orders %}
+			<div class="order_details_table">
+                <h2>Order ID - #{{order.order_id}}</h2>
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">Product</th>
+								<th scope="col">Quantity</th>
+                                <th scope="col">Total</th>
+							</tr>
+						</thead>
+						<tbody>
+                            {% for item in order.orderitems %}
+                            <tr>
+								<td>
+									<p>{{item.product.title}}</p>
+								</td>
+								<td>
+									<h5>x {{item.quantity}}</h5>
+								</td>
+								<td>
+									<p>₦{{item.total}}</p>
+								</td>
+							</tr>
+                            {% endfor %}
+							<tr>
+								<td>
+									<h4>Subtotal</h4>
+								</td>
+								<td>
+									<h5></h5>
+								</td>
+								<td>
+									<p>₦{{order.total}}</p>
+								</td>
+                            </tr>
+							<tr>
+								<td>
+									<h4>Shipping</h4>
+								</td>
+								<td>
+									<h5></h5>
+								</td>
+								<td>
+									<p>Flat rate: ₦200</p>
+								</td>
+                            </tr>
+                            <tr>
+								<td>
+									<h4>Status</h4>
+								</td>
+								<td>
+									<h5></h5>
+								</td>
+								<td>
+									<p>{{order.status}}</p>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<h4>Total</h4>
+								</td>
+								<td>
+									<h5></h5>
+								</td>
+								<td>
+									<p>₦{{order.total+200}}</p>
+								</td>
+                            </tr>
+						</tbody>
+					</table>
+                </div> 
+            </div>
+            {% endfor %}
+		</div>
+	</section>
+	<!--================End Order Details Area =================-->
+
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
+

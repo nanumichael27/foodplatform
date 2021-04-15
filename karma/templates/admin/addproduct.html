@@ -1,0 +1,744 @@
+{% extends "admin/layout/base.html" %}
+
+{% block description %}
+Products
+{% endblock %}
+
+{% block styles %}
+<style>
+    .images-container{
+        overflow-x: scroll;
+        /* padding-top: 20px; */
+    }
+
+    .images-container ul{
+        list-style: none;
+        display: table-row;
+    }
+
+    .images-container ul li{
+        display: table-cell;
+        padding-right: 7px;
+        position: relative;
+    }
+    
+    .images-container ul li img{
+        border-radius: 12px;
+    }
+
+    .images-container ul li .remove-image{
+        position: absolute;
+        top: 1px;
+        left: 77px;
+        color: red;
+        cursor: pointer;
+        font-size: 22px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- ============================================================== -->
+    <!-- modal  -->
+    <!-- ============================================================== -->
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <!-- <div class="section-block" id="modal">
+            <h3 class="section-title">Modals</h3>
+            <p>Use Bootstrap’s JavaScript modal plugin to add dialogs to your site for lightboxes, user notifications, or completely custom content.</p>
+        </div> -->
+        <div class="card">
+            <h5 class="card-header">Add your products here.</h5>
+            <div class="card-body">
+                <div class="">
+                    <!-- Button trigger modal -->
+                    <a href="#" class="btn btn-primary btn-block btn-rounded" data-toggle="modal" data-target="#addProductModal">
+                               Click here to add a product.
+                            </a>
+                    <!-- Modal -->
+                    <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
+                                    <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </a>
+                                </div>
+                                <div class="modal-body">
+                                        <div class="text-center">
+                                            <div id="upload-demo" class="js-product-submit"></div>
+                                            <span id="re-upload-button" style="
+                                            font-size: 30px;
+                                            position: absolute;
+                                            top: 15px;
+                                            left: 383px;
+                                            z-index: 1;
+                                            color: rgb(255 64 123);
+                                            cursor: pointer;
+                                            display: none;"
+                                            onclick="reupload_product()"
+                                            >
+                                                <i class="fas fa-arrow-circle-left"></i>
+                                            </span>
+                                            <span id="add-image" style="font-size: 30px;
+                                            position: absolute;
+                                            top: 73px;
+                                            left: 383px;
+                                            z-index: 1;
+                                            color: rgb(255, 64, 123);
+                                            cursor: pointer;"
+                                             >
+                                                <i class="fas fa-plus"></i>
+                                            </span>
+                                        </div>
+                                        <div id="js-default-product-image" style="text-align: center;">                  
+                                          <label style="cursor: pointer;" >
+                                              <span style="font-size: 11em;">
+                                                  <i class="fa fa-image"></i>
+                                              </span>
+                                              <input type="file" id="product-picture" style="display: none; ">
+                                          </label>
+                                        </div>
+                                        <div class="container images-container">
+                                            <ul id="images-list">
+                                            </ul>
+                                        </div>
+                                    <div class="col-md-12 p-0">
+                                        <form id="add-product-form">
+                                            <div class="form-group">
+                                                <label for="title" class="col-form-label">Product name</label>
+                                                <input id="title" name="title" type="text" placeholder="Product name" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="category-select">Select a Category</label>
+                                                <select name="category" class="form-control" id="category-select">
+                                                    <option selected >Select a category</option>
+                                                    {% for category in categories %}
+                                                        <option value="{{ category.category_id }}" >{{ category.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label " for="summernote">Product Description </label>
+                                                <textarea class="form-control" id="summernote" name="description" rows="6" placeholder="Write Description"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Price <small class="text-muted">In Naira</small></label>
+                                                <input type="number" class="form-control international-inputmask" name='price' placeholder="">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>In stock <small class="text-muted">minimum of 3</small></label>
+                                                <input type="number" class="form-control international-inputmask" name='stock' placeholder="">
+                                            </div>
+                                        </form>
+                                    </div>
+                                    
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary btn-rounded" data-dismiss="modal">Cancel</button>
+                                    <button class="btn btn-success btn-rounded" id="upload-product-button">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- modal  -->
+    <!-- ============================================================== -->
+    
+        
+        
+            
+                <div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
+                                <a class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </a>
+                            </div>
+                            <div class="modal-body">
+                                <div class="col-md-12 p-0">
+                                    <form id="edit-product-form">
+                                        <div class="form-group">
+                                            <label for="edit-title" class="col-form-label">Product name</label>
+                                            <input id="edit-title" name="title" type="text" placeholder="Product name" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="category-select">Select a Category</label>
+                                            <select name="category" class="form-control" id="edit-category-select">
+                                                {% for category in categories %}
+                                                    <option value="{{category.category_id}}" >{{ category.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label " for="edit-description">Product Description </label>
+                                            <textarea class="form-control" id="edit-description" name="description" rows="6" placeholder="Write Description"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Price <small class="text-muted">In Naira</small></label>
+                                            <input id="edit-price" type="number" class="form-control international-inputmask" name='price' placeholder="">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>In stock <small class="text-muted">minimum of 3</small></label>
+                                            <input id="edit-stock" type="number" class="form-control international-inputmask" name='stock' placeholder="">
+                                        </div>
+                                    </form>
+                                </div>
+                                
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary btn-rounded" data-dismiss="modal">Cancel</button>
+                                <button class="btn btn-success btn-rounded" id="edit-product-button">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           
+        
+ 
+</div>
+<div class="row">
+    <span id="marker"></span>
+
+    {% for product in products %}
+    <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
+        <div class="product-thumbnail">
+            <div class="product-img-head">
+                <div class="product-img">
+                    <img src="{{ url_for('static', filename='productuploads/'+product.images[0].name) }}" alt="" class="img-fluid"></div>
+                <div class=""><a href="#" class="product-wishlist-btn"><i class="fas fa-heart"></i></a></div>
+            </div>
+            <div class="product-content">
+                <div class="product-content-head">
+                    <h3 class="product-title {{product.product_id}}title" >{{ product.title }}</h3>
+                    <div class="product-rating d-inline-block">
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fa fa-fw fa-star"></i>
+                    </div>
+                    <div class="product-price " >₦<span class="{{product.product_id}}price">{{ product.price }}</span>
+                        <del class="product-del">₦{{ product.price+0.2*product.price }}</del>
+                    </div>
+                </div>
+                <div class="sr-only {{product.product_id}}description">
+                    {{product.description}}
+                </div>
+                <div class="sr-only {{product.product_id}}category">
+                    {{product.category.category_id}}
+                </div>
+                <div class="product-btn">
+                    <p>In Stock: <b class="{{product.product_id}}stock">{{product.in_stock}}</b></p>
+                    <p>Sold: </p>
+                    <button id="{{product.product_id}}" class="btn btn-primary btn-sm edit-product">Edit</button>
+                    <a href="{{url_for('shop.single_product', product_id=product.product_id)}}" class="btn btn-outline-light btn-sm">View</a>
+                    <!-- <a href="#" class="btn btn-outline-light"><i class="fas fa-exchange-alt"></i></a> -->
+                    <button  id="{{product.product_id}}" class="delete-product btn btn-danger btn-sm"><i class="fas fa-trash"></i>Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    
+</div>
+<!-- <div class="row">
+    <div class="offset-xl-2 col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 pr-xl-0 pr-lg-0 pr-md-0  m-b-30">
+                <div class="product-slider">
+                    <div id="productslider-1" class="product-carousel carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                        </ol>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img class="d-block" src="assets/images/eco-slider-img-1.png" alt="First slide">
+                            </div>
+                            <div class="carousel-item">
+                                <img class="d-block" src="assets/images/eco-slider-img-2.png" alt="Second slide">
+                            </div>
+                            <div class="carousel-item">
+                                <img class="d-block" src="assets/images/eco-slider-img-3.png" alt="Third slide">
+                            </div>
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                         <span class="sr-only">Previous</span>
+                              </a>
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                             <span class="sr-only">Next</span>
+                                 </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 pl-xl-0 pl-lg-0 pl-md-0 border-left m-b-30">
+                <div class="product-details">
+                    <div class="border-bottom pb-3 mb-3">
+                        <h2 class="mb-3">T-Shirt Product Title</h2>
+                        <div class="product-rating d-inline-block float-right">
+                            <i class="fa fa-fw fa-star"></i>
+                            <i class="fa fa-fw fa-star"></i>
+                            <i class="fa fa-fw fa-star"></i>
+                            <i class="fa fa-fw fa-star"></i>
+                            <i class="fa fa-fw fa-star"></i>
+                        </div>
+                        <h3 class="mb-0 text-primary">$49.00</h3>
+                    </div>
+                    <div class="product-colors border-bottom">
+                        <h4>Select Colors</h4>
+                        <input type="radio" class="radio" id="radio-1" name="group" />
+                        <label for="radio-1"></label>
+                        <input type="radio" class="radio" id="radio-2" name="group" />
+                        <label for="radio-2"></label>
+                        <input type="radio" class="radio" id="radio-3" name="group" />
+                        <label for="radio-3"></label>
+                    </div>
+                    <div class="product-size border-bottom">
+                        <h4>Size</h4>
+                        <div class="btn-group" role="group" aria-label="First group">
+                            <button type="button" class="btn btn-outline-light">SM</button>
+                            <button type="button" class="btn btn-outline-light">L</button>
+                            <button type="button" class="btn btn-outline-light">XL</button>
+                            <button type="button" class="btn btn-outline-light">XXl</button>
+                        </div>
+                        <div class="product-qty">
+                            <h4>Quantity</h4>
+                            <div class="quantity">
+                                <input type="number" min="1" max="9" step="1" value="1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-description">
+                        <h4 class="mb-1">Descriptions</h4>
+                        <p>Praesent et cursus quam. Etiam vulputate est et metus pellentesque iaculis. Suspendisse nec urna augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
+                        <a href="#" class="btn btn-primary btn-block btn-lg">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 m-b-60">
+                <div class="simple-card">
+                    <ul class="nav nav-tabs" id="myTab5" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active border-left-0" id="product-tab-1" data-toggle="tab" href="#tab-1" role="tab" aria-controls="product-tab-1" aria-selected="true">Descriptions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="product-tab-2" data-toggle="tab" href="#tab-2" role="tab" aria-controls="product-tab-2" aria-selected="false">Reviews</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent5">
+                        <div class="tab-pane fade show active" id="tab-1" role="tabpanel" aria-labelledby="product-tab-1">
+                            <p>Praesent et cursus quam. Etiam vulputate est et metus pellentesque iaculis. Suspendisse nec urna augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubiliaurae.</p>
+                            <p>Nam condimentum erat aliquet rutrum fringilla. Suspendisse potenti. Vestibulum placerat elementum sollicitudin. Aliquam consequat molestie tortor, et dignissim quam blandit nec. Donec tincidunt dui libero, ac convallis urna dapibus eu. Praesent volutpat mi eget diam efficitur, a mollis quam ultricies. Morbi eu turpis odio.</p>
+                            <ul class="list-unstyled arrow">
+                                <li>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+                                <li>Donec ut elit sodales, dignissim elit et, sollicitudin nulla.</li>
+                                <li>Donec at leo sed nisl vestibulum fermentum.
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="product-tab-2">
+                            <div class="review-block">
+                                <p class="review-text font-italic m-0">“Vestibulum cursus felis vel arcu convallis, viverra commodo felis bibendum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin non auctor est, sed lacinia velit. Orci varius natoque penatibus et magnis dis parturient montes nascetur ridiculus mus.”</p>
+                                <div class="rating-star mb-4">
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                </div>
+                                <span class="text-dark font-weight-bold">Virgina G. Lightfoot</span><small class="text-mute"> (Company name)</small>
+                            </div>
+                            <div class="review-block border-top mt-3 pt-3">
+                                <p class="review-text font-italic m-0">“Integer pretium laoreet mi ultrices tincidunt. Suspendisse eget risus nec sapien malesuada ullamcorper eu ac sapien. Maecenas nulla orci, varius ac tincidunt non, ornare a sem. Aliquam sed massa volutpat, aliquet nibh sit amet, tincidunt ex. Donec interdum pharetra dignissim.”</p>
+                                <div class="rating-star mb-4">
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                </div>
+                                <span class="text-dark font-weight-bold">Ruby B. Matheny</span><small class="text-mute"> (Company name)</small>
+                            </div>
+                            <div class="review-block  border-top mt-3 pt-3">
+                                <p class="review-text font-italic m-0">“ Cras non rutrum neque. Sed lacinia ex elit, vel viverra nisl faucibus eu. Aenean faucibus neque vestibulum condimentum maximus. In id porttitor nisi. Quisque sit amet commodo arcu, cursus pharetra elit. Nam tincidunt lobortis augueat euismod ante sodales non. ”</p>
+                                <div class="rating-star mb-4">
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                    <i class="fa fa-fw fa-star"></i>
+                                </div>
+                                <span class="text-dark font-weight-bold">Gloria S. Castillo</span><small class="text-mute"> (Company name)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 m-b-10">
+                <h3> Related Products</h3>
+            </div>
+            <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
+                <div class="product-thumbnail">
+                    <div class="product-img-head">
+                        <div class="product-img">
+                            <img src="assets/images/eco-product-img-1.png" alt="" class="img-fluid"></div>
+                        <div class="ribbons">New</div>
+                        <div class=""><a href="#" class="product-wishlist-btn"><i class="fas fa-heart"></i></a></div>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-content-head">
+                            <h3 class="product-title">T-Shirt Product Title</h3>
+                            <div class="product-rating d-inline-block">
+                                <i class="fa fa-fw fa-star"></i>
+                                <i class="fa fa-fw fa-star"></i>
+                                <i class="fa fa-fw fa-star"></i>
+                                <i class="fa fa-fw fa-star"></i>
+                                <i class="fa fa-fw fa-star"></i>
+                            </div>
+                            <div class="product-price">$49.00</div>
+                        </div>
+                        <div class="product-btn">
+                            <a href="#" class="btn btn-primary">Add to Cart</a>
+                            <a href="#" class="btn btn-outline-light">Details</a>
+                            <a href="#" class="btn btn-outline-light"><i class="fas fa-exchange-alt"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
+                <div class="product-thumbnail">
+                    <div class="product-img-head">
+                        <div class="product-img">
+                            <img src="assets/images/eco-product-img-2.png" alt="" class="img-fluid"></div>
+                        <div class="ribbons bg-danger">Sold</div>
+                        <div class=""><a href="#" class="product-wishlist-btn"><i class="fas fa-heart"></i></a></div>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-content-head">
+                            <h3 class="product-title">T-Shirt Product Title</h3>
+                            <div class="product-rating d-inline-block">
+                                <i class="fa fa-fw fa-star"></i>
+                                <i class="fa fa-fw fa-star"></i>
+                                <i class="fa fa-fw fa-star"></i>
+                                <i class="fa fa-fw fa-star"></i>
+                                <i class="fa fa-fw fa-star"></i>
+                            </div>
+                            <div class="product-price">$49.00</div>
+                        </div>
+                        <div class="product-btn">
+                            <a href="#" class="btn btn-primary">Add to Cart</a>
+                            <a href="#" class="btn btn-outline-light">Details</a>
+                            <a href="#" class="btn btn-outline-light"><i class="fas fa-exchange-alt"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
+                <div class="product-thumbnail">
+                    <div class="product-img-head">
+                        <div class="product-img">
+                            <img src="assets/images/eco-product-img-3.png" alt="" class="img-fluid"></div>
+                        <div class="ribbons bg-brand">Offer</div>
+                        <div class=""><a href="#" class="product-wishlist-btn active"><i class="fas fa-heart"></i></a></div>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-content-head">
+                            <h3 class="product-title">T-Shirt Product Title</h3>
+                            <div class="product-rating d-inline-block">
+                                <i class="fa fa-fw fa-star"></i>
+                                <i class="fa fa-fw fa-star"></i>
+                                <i class="fa fa-fw fa-star"></i>
+                                <i class="fa fa-fw fa-star"></i>
+                                <i class="fa fa-fw fa-star"></i>
+                            </div>
+                            <div class="product-price">$49.00
+                                <del class="product-del">$69.00</del>
+                            </div>
+                        </div>
+                        <div class="product-btn">
+                            <a href="#" class="btn btn-primary">Add to Cart</a>
+                            <a href="#" class="btn btn-outline-light">Details</a>
+                            <a href="#" class="btn btn-outline-light"><i class="fas fa-exchange-alt"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            height: 300
+
+        });
+
+        // $('#edit-description').summernote({
+        //     height: 300
+        // })
+    });
+</script>
+<script>
+    $('#upload-demo').hide();
+    $('#upload-product-button').hide();
+    $('#add-image').hide();
+
+
+    var resize = $('#upload-demo').croppie({
+    enableExif: true,
+    enableOrientation: true,    
+    viewport: { // Default { width: 100, height: 100, type: 'square' } 
+        width: 263,
+        height: 280,
+        type: 'square' //square
+    },
+    boundary: {
+        width: 265,
+        height: 282
+    }
+});
+
+
+    $('#product-picture').on('input', function () { 
+        $('#js-default-product-image').hide();
+        $('#upload-demo').slideDown(1000,);
+        $('#re-upload-button').slideDown(1000,);
+        $('#add-image').slideDown(1000,);
+        var reader = new FileReader();
+        reader.onload = function (e) {
+        resize.croppie('bind',{
+            url: e.target.result
+        }).then(function(){
+            $('#upload-product-button').fadeIn();
+        });
+        }
+        reader.readAsDataURL(this.files[0]);
+    });
+
+
+    var images = [];
+
+    function generateImageForList(img){
+        image = '';
+        image+='<li>';
+        image+="<img src="+ img +" style='max-width: 100px' >";
+        image+='<i class="far fa-times-circle remove-image">';
+        image+='</i>';
+        image+='</li>';
+        return image;
+    }
+
+    function removeImage(image){
+        const source = image.attr('src');
+        const index = images.indexOf(source);
+        if (index > -1) {
+        images.splice(index, 1);
+        }
+        image.parent().fadeOut();
+    }
+
+    $('#add-image').click(function(){
+        resize.croppie('result', {
+        type: 'canvas',
+            size: {
+            width: 263,
+            height: 280},
+            circle: false,
+        }).then(function (img) {
+            $('#images-list').append(generateImageForList(img))
+            images.push(img);
+
+            $('.remove-image').click(function(){
+                removeImage($(this).prev());
+            });
+        });
+    });
+
+    $('#upload-product-button').on('click', function (img) {
+            imagestoupload = JSON.stringify(images);
+            let datatopost = $('#add-product-form').serializeArray();
+            datatopost.push({name: 'product', value: 1});
+            datatopost.push({name: 'images', value: imagestoupload});
+            console.log(datatopost);
+
+            $.ajax({
+            url: "{{ url_for('admin.add_product') }}",
+            type: "POST",
+            data: datatopost,
+            beforeSend:function(){
+                toastr.clear();
+                toastr.info('Uploading product');
+
+            },
+            success: function (data) {
+                if(data == 'success'){
+                toastr.clear();
+                swal('Successful!', 'product added', 'info')
+                location.reload();
+                
+                }else{
+                    swal('Unsuccessful!', data, 'error');
+                }
+            },
+            error: function(){
+                toastr.clear();
+                swal('Unsuccessful!', 'Please check your network connection', 'error');
+
+            }
+            });
+        });
+
+        function reupload_product(){
+            $('#product-picture').click();
+            $('#upload-demo').slideUp(1000,);
+            $('#re-upload-button').slideUp(500,);
+        }
+
+
+        $('.delete-product').click(function(){
+            button = $(this);
+            id = button.attr('id')
+
+            swal({
+            title: "Are you sure?",
+            text: "Do you want to delete this product?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            })
+            .then((willDelete) => {
+            if (willDelete) {
+
+                let datatopost = [
+                    {name: 'id', value:id},
+
+                    ];
+                    console.log(datatopost);
+                $.ajax({
+                            url: "{{ url_for('admin.delete_product') }}",
+                            type: "POST",
+                            data: datatopost,
+                            beforeSend:function(){
+                                toastr.clear();
+                                toastr.info('Deleting');
+                            },
+                            success: function (data) {
+                            toastr.clear();
+                                if(data == 'success'){
+                                toastr.success('product deleted!')
+                                button.parent().parent().parent().parent().fadeOut()
+                                setTimeout(() => {button.parent().parent().parent().parent().remove()}, 2000)
+                                }else{
+                                    swal('Unsuccessful!', data, 'error');
+                                }
+                            },
+                            error: function(){
+                                toastr.clear();
+                                swal('Unsuccessful!', 'Please check your network ', 'error');
+
+                            }
+                            });
+
+            } else {
+                swal('Hey', "The product was not deleted", 'info');
+            }
+            });
+        });
+
+
+
+        $('.edit-product').click(function(){
+            $('#editProductModal').modal('show');
+            let id = parseInt($(this).attr('id'));
+
+            let productData = extractDataFromProduct(id);
+            setupEditProductForm(productData);
+            console.log(productData);
+        });
+
+        function extractDataFromProduct(id){
+            let title = $('.'+id+'title').text();
+            let description = $('.'+id+'description').text();
+            let price = $('.'+id+'price').text();
+            let stock = $('.'+id+'stock').text();
+            let category = parseInt($('.'+id+'category').text());
+
+            let ProductData = {
+                title: title,
+                description: description,
+                price: price,
+                stock: stock,
+                category: category,
+            }
+
+            $('#edit-product-button').on('click', function (img) {
+                sendEditProductRequest(id);
+            });
+
+            return ProductData;
+        }
+
+        function setupEditProductForm(productData){
+            $('#edit-title').val(productData.title);
+            // $('#edit-description').html(productData.description);
+            $('#edit-price').val(productData.price);
+            $('#edit-stock').val(productData.stock);
+            $('#edit-category-select').val(productData.category);
+
+            $('#edit-description').summernote({
+            height: 300
+            });
+            $('#edit-description').summernote('code', productData.description);
+        }
+
+        function sendEditProductRequest(id){
+            let datatopost = $('#edit-product-form').serializeArray();
+            datatopost.push({name: 'product', value: 1} );
+            datatopost.push({name: 'id', value: id})
+            console.log(datatopost);
+
+            $.ajax({
+            url: "{{ url_for('admin.edit_product') }}",
+            type: "POST",
+            data: datatopost,
+            beforeSend:function(){
+                toastr.clear();
+                toastr.info('Editing product');
+
+            },
+            success: function (data) {
+                if(data == 'success'){
+                toastr.clear();
+                swal('Successful!', 'Product Edited', 'info').then(() => {location.reload();});
+                }else{
+                    swal('Unsuccessful!', data, 'error');
+                }
+            },
+            error: function(){
+                toastr.clear();
+                swal('Unsuccessful!', 'Please check your network connection', 'error');
+
+            }
+            });
+        }
+
+</script>
+{% endblock %}

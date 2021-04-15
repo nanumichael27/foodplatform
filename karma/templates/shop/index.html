@@ -1,0 +1,169 @@
+{% extends 'base.html'%}
+{% block title %}Karma Shop{% endblock %}
+
+{% block body%}
+
+	<!-- start banner Area -->
+	<section class="banner-area">
+		<div class="container">
+			<div class="row fullscreen align-items-center justify-content-start">
+				<div class="col-lg-12">
+					<div class="active-banner-slider owl-carousel">
+						<!-- single-slide -->
+						<div class="row single-slide align-items-center d-flex">
+							<div class="col-lg-5 col-md-6">
+								<div class="banner-content">
+									<h1>Place your orders from anywhere! <br></h1>
+									<p>Get any order you make within 30 minutes of making the order! We are reliable, fast and
+										efficient and guarantee your orders 100% safety.
+									</p>
+									<!-- <div class="add-bag d-flex align-items-center">
+										<a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
+										<span class="add-text text-uppercase">Add to Bag</span>
+									</div> -->
+								</div>
+							</div>
+							<div class="col-lg-7">
+								<div class="banner-img bounce" style="margin-top: 100px;">
+									<img class="img-fluid" src="{{url_for('static', filename='img/banner/Food-Free-PNG-Image.png')}}" alt="">
+								</div>
+							</div>
+						</div>
+						<!-- single-slide -->
+						<div class="row single-slide">
+							<div class="col-lg-5">
+								<div class="banner-content">
+									<h1>Anytime,  <br> Anywhere!</h1>
+									<p>Our responses are quick and precise.</p>
+									<!-- <div class="add-bag d-flex align-items-center">
+										<a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
+										<span class="add-text text-uppercase">Add to Bag</span>
+									</div> -->
+								</div>
+							</div>
+							<div class="col-lg-7">
+								<div class="banner-img bounce" style="margin-top: 100px;">
+									<img class="img-fluid" src="{{url_for('static', filename='img/banner/Food-Free-Download-PNG.png')}}" alt="">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End banner Area -->
+
+	<!-- start features Area -->
+	<section class="features-area section_gap bounce">
+		<div class="container">
+			<div class="row features-inner">
+				<!-- single features -->
+				<div class="col-lg-3 col-md-6 col-sm-6">
+					<div class="single-features">
+						<div class="f-icon">
+							<img src="{{url_for('static', filename='img/features/f-icon1.png')}}" alt="">
+						</div>
+						<h6>Quick Delivery</h6>
+						<p>Free Shipping on all order</p>
+					</div>
+				</div>
+				<!-- single features -->
+				<div class="col-lg-3 col-md-6 col-sm-6">
+					<div class="single-features">
+						<div class="f-icon">
+							<img src="{{url_for('static', filename='img/features/f-icon2.png')}}" alt="">
+						</div>
+						<h6>Return Policy</h6>
+						<p>quick returns on faulty orders</p>
+					</div>
+				</div>
+				<!-- single features -->
+				<div class="col-lg-3 col-md-6 col-sm-6">
+					<div class="single-features">
+						<div class="f-icon">
+							<img src="{{url_for('static', filename='img/features/f-icon3.png')}}" alt="">
+						</div>
+						<h6>24/7 Support</h6>
+						<p>Receive constant feedback from our support agents</p>
+					</div>
+				</div>
+				<!-- single features -->
+				<div class="col-lg-3 col-md-6 col-sm-6">
+					<div class="single-features">
+						<div class="f-icon">
+							<img src="{{url_for('static', filename='img/features/f-icon4.png')}}" alt="">
+						</div>
+						<h6>Secure Payment</h6>
+						<p>Full payment integration for swift payments</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- end features Area -->
+
+	<!-- Start category Area -->
+	 <!-- include 'shop/category_area.html'  -->
+	<!-- End category Area -->
+
+	<!-- start product Area -->
+	{% include 'shop/latest_products.html' %}
+	<!-- end product Area -->
+
+	<!-- Start exclusive deal Area -->
+	 <!-- include 'shop/exclusivedeal_area.html'  -->
+	<!-- End exclusive deal Area -->
+
+	<!-- Start brand Area -->
+	{% include 'shop/branded_area.html' %}
+	<!-- End brand Area -->
+
+	<!-- Start related-product Area -->
+	{% include 'shop/dealsoftheweek_area.html' %}
+	<!-- End related-product Area -->
+
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    // $('.add-to-cart-button').click(function(){
+    // 	alert('you want to add a product to cart');
+    // });
+
+    $('.add-to-cart-button').on('click', function (img) {
+        let productId = $(this).attr('id');
+        let datatopost = [];
+        datatopost.push({name: 'product', value: 1});
+        datatopost.push({name: 'id', value: productId});
+        datatopost.push({name: 'quantity', value: 1});
+        console.log(datatopost);
+
+        $.ajax({
+        url: "{{ url_for('shop.addToCart') }}",
+        type: "POST",
+        data: datatopost,
+        beforeSend:function(){
+            toastr.clear();
+            toastr.info('Adding to cart');
+
+        },
+        success: function (data) {
+            if(data == 'success'){
+            toastr.clear();
+            toastr.success('Item added to cart');
+            
+            }else{
+                swal('Unsuccessful!', data, 'error');
+            }
+        },
+        error: function(){
+            toastr.clear();
+            swal('Unsuccessful!', 'Please check your network connection', 'error');
+
+        }
+        });
+    });
+</script>
+{% endblock %}

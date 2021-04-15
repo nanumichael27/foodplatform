@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+
+{% block body %}
+
+
+	<!-- Start Banner Area -->
+	<section class="banner-area organic-breadcrumb">
+		<div class="container">
+			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+				<div class="col-first">
+					<h1>Login/Register</h1>
+					<nav class="d-flex align-items-center">
+						<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+						<a href="{{ url_for('auth.register') }}">Register</a>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End Banner Area -->
+
+	<!--================Register Box Area =================-->
+	<section class="login_box_area section_gap">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="login_box_img">
+						<img class="img-fluid" src="{{ url_for('static', filename='img/login.jpg') }}" alt="">
+						<div class="hover">
+							<h4>Are you a Registered user?</h4>
+							<p>Click the link below to login</p>
+							<a class="primary-btn" href="{{ url_for('auth.login')}}">Login</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="login_form_inner">
+						<h3>Register</h3>
+                          {% for message in get_flashed_messages() %}
+                            <span class="alert alert-danger">{{ message }}</span>
+                          {% endfor %}
+						<form class="row login_form" action="{{ url_for('auth.register') }}" method="post" id="contactForm" novalidate="novalidate">
+							<div class="col-md-12 form-group">
+								<input type="text" class="form-control" id="username" name="username" placeholder="Username" value="{{ request.form.username }}" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
+							</div>
+                            <div class="col-md-12 form-group">
+								<input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full Name" value="{{ request.form.fullname }}" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Fullname'">
+							</div>
+							<div class="col-md-12 form-group">
+								<input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{ request.form.email }}" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'">
+							</div>
+                            <div class="col-md-12 form-group">
+								<input type="text" class="form-control" id="phone" name="phone" placeholder="Phone" value="{{ request.form.phone }}" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Phone'">
+							</div>
+                            <div class="col-md-12 form-group">
+								<input type="password" class="form-control" id="password" name="password" placeholder="Password" value="{{ request.form.password }}" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+							</div>
+                            <div class="col-md-12 form-group">
+								<input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm Password" value="{{ request.form.password2 }}" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Confirm Password'">
+							</div>
+							<div class="col-md-12 form-group">
+								<button type="submit" value="submit" class="primary-btn">Register</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End Register Box Area =================-->
+
+{% endblock %}

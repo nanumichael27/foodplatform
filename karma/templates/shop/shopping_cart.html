@@ -1,0 +1,419 @@
+{% extends 'base.html'%}
+{% block title %}Karma Shop{% endblock %}
+
+{% block body%}
+
+    <!-- Start Banner Area -->
+    <section class="banner-area organic-breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+                <div class="col-first">
+                    <h1>Shopping Cart</h1>
+                    <nav class="d-flex align-items-center">
+                        <a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+                        <a href="category.html">Cart</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Banner Area -->
+
+    <!--================Cart Area =================-->
+    <section class="cart_area">
+        <div class="container">
+            <div class="cart_inner">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if not cart_items %}
+                                <tr>
+                                    <td>
+                                        <div class="alert alert-info" role="alert">
+                                            Cart is empty
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% else %}
+                            {% for item in cart_items %}
+                            <tr>
+                                <td>
+                                    <div class="media">
+                                        <div class="d-flex">
+                                            <img height="70px" src="{{ url_for('static', filename='productuploads/'+item.product.images[0].name) }}" alt="">
+                                        </div>
+                                        <div class="media-body">
+                                            <p>{{ item.product.title }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <h5>₦{{ item.product.price }}</h5>
+                                </td>
+                                <td>
+                                    <div class="product_count">
+                                        <input type="number" name="quantity" id="{{item.cart_item_id}}" min="0" maxlength="12" value="{{ item.quantity }}" title="Quantity:"
+                                            class="input-text qty quantity">
+                                        <button 
+                                            class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
+                                        <button 
+                                            class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <h5>₦{{ item.total }}</h5>
+                                </td>
+                                <td>
+                                    <button type="button" id="{{item.cart_item_id}}" class="btn remove-item btn-sm btn-danger">Remove</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+                            
+                            <tr class="bottom_button">
+                                <td>
+                                    <a class="gray_btn" href="#">Update Cart</a>
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                                <!-- <td>
+                                    <div class="cupon_text d-flex align-items-center">
+                                        <input type="text" placeholder="Coupon Code">
+                                        <a class="primary-btn" href="#">Apply</a>
+                                        <a class="gray_btn" href="#">Close Coupon</a>
+                                    </div>
+                                </td> -->
+                            </tr>
+                            <tr>
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <h5>Subtotal</h5>
+                                </td>
+                                <td>
+                                    <h5>₦{{cart.total}}</h5>
+                                </td>
+                            </tr>
+                            <!-- <tr class="shipping_area">
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <h5>Shipping</h5>
+                                </td>
+                                <td>
+                                    <div class="shipping_box">
+                                        <ul class="list">
+                                            <li><a href="#">Flat Rate: $5.00</a></li>
+                                            <li><a href="#">Free Shipping</a></li>
+                                            <li><a href="#">Flat Rate: $10.00</a></li>
+                                            <li class="active"><a href="#">Local Delivery: $2.00</a></li>
+                                        </ul>
+                                        <h6>Calculate Shipping <i class="fa fa-caret-down" aria-hidden="true"></i></h6>
+                                        <select class="shipping_select">
+                                            <option value="1">Bangladesh</option>
+                                            <option value="2">India</option>
+                                            <option value="4">Pakistan</option>
+                                        </select>
+                                        <select class="shipping_select">
+                                            <option value="1">Select a State</option>
+                                            <option value="2">Select a State</option>
+                                            <option value="4">Select a State</option>
+                                        </select>
+                                        <input type="text" placeholder="Postcode/Zipcode">
+                                        <a class="gray_btn" href="#">Update Details</a>
+                                    </div>
+                                </td>
+                            </tr> -->
+                            <tr class="out_button_area">
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <div class="checkout_btn_inner d-flex align-items-center">
+                                        <a class="gray_btn" href="{{url_for('shop.index')}}">Continue Shopping</a>
+                                        {% if cart_items %}
+                                        <a class="primary-btn" href="{{ url_for('shop.checkout') }}">Proceed to checkout</a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--================End Cart Area =================-->
+
+    <!-- <section>
+        <div class="container">
+            <div class="form-group">
+                <label for=""></label>
+                <input class="form-control mr-sm-2" id="searchLocation" type="text" placeholder="Search for your location Here!">
+                <small id="helpId" class="form-text text-muted">Hey! We're now available in uniben.</small>
+            </div>
+            <div id="map" style="height: 500px;"></div>
+        </div>
+    </section> -->
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var increaseButton = $('.increase');
+    var reduceButton = $('.reduced');
+    var quantity = $('.quantity');
+
+    increaseButton.click(function(){
+        let input = $(this).prev('.quantity');
+        input.val(function(i, oldval){
+            return ++oldval;
+        });
+        input.change();
+    });
+
+    reduceButton.click(function(){
+        let input = $(this).prev().prev('.quantity');
+        input.val(function(i, oldval){
+            return oldval == 0? 0: --oldval;
+        });
+        input.change();
+    });
+
+    quantity.on('change', function(){
+        qty = $(this).val();
+        id = $(this).attr('id');
+        updateCartItem(id, qty);
+    })
+
+    function updateCartItem(id, quantity){
+        var datatopost = [];
+        datatopost.push({name: 'id', value: id});
+        datatopost.push({name: 'quantity', value: quantity});
+
+        $.ajax({
+        url: "{{ url_for('shop.updateCart') }}",
+        type: "POST",
+        data: datatopost,
+        beforeSend:function(){
+            toastr.clear();
+            toastr.info('updating cart');
+
+        },
+        success: function (data) {
+            if(data == 'success'){
+            toastr.clear();
+            toastr.success('cart updated');
+            location.reload();
+            
+            }else{
+                swal('Unsuccessful!', data, 'error');
+            }
+        },
+        error: function(){
+            toastr.clear();
+            swal('Unsuccessful!', 'Please check your network connection', 'error');
+
+        }
+        });
+    }
+
+
+    $('.remove-item').click(function(){
+        id = $(this).attr('id');
+        deleteItemFromCart(id);
+    });
+
+    function deleteItemFromCart(id){
+        datatopost = [
+            {name: 'id', value: id},
+            {name: 'deleteitem', value:1}
+        ]
+
+        $.ajax({
+        url: "{{ url_for('shop.deleteItemFromCart') }}",
+        type: "POST",
+        data: datatopost,
+        beforeSend:function(){
+            toastr.clear();
+            toastr.error('removing item from cart');
+
+        },
+        success: function (data) {
+            if(data == 'success'){
+            toastr.clear();
+            toastr.success('item removed from cart');
+            location.reload();
+            
+            }else{
+                swal('Unsuccessful!', data, 'error');
+            }
+        },
+        error: function(){
+            toastr.clear();
+            swal('Unsuccessful!', 'Please check your network connection', 'error');
+
+        }
+        });
+    }
+</script>
+
+<!-- <script>
+    let coords = {lat:344.454 , lng: 344.344};
+    let unibenCoords = {lat: 6.3931, lng: 5.6195};
+    navigator.geolocation.getCurrentPosition( (position) => {
+        // alert('Latitude: '+ position.coords.latitude + ', Longitude: '+ position.coords.longitude);
+        coords.lat = position.coords.latitude
+        coords.lng = position.coords.longitude
+    })
+
+
+function initMap() {
+    let options = {
+        center: unibenCoords,
+        zoom: 15
+    }
+
+    let map = new google.maps.Map(document.getElementById("map"), options);
+    let geocoder = new google.maps.Geocoder();
+    
+    // listen for a click on the map
+    // google.maps.event.addListener(map, 'click', function (event) {
+    //     addMarker({coords:event.latLng});
+    // });
+
+    initializeAutoComplete();
+
+    // const icon = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
+    
+    // let marker = new google.maps.Marker({
+    //   position: coords,
+    //   map: map,
+    //   icon: icon,
+    // });
+
+    // let infoWindow = new google.maps.InfoWindow({
+    //     content: 'Info content'
+    // });
+
+    // marker.addListener('click', function() {
+    //     infoWindow.open(map, marker);
+    // });
+
+    // let markers =[
+    // {
+    //     coords: unibenCoords,
+    //     content: 'This is your prosent location',
+    //     icon: "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
+    //     draggable: true
+    // },
+    // ];
+
+    // markers.forEach(marker => {
+    //     addMarker(marker);
+    // });
+
+    let marker = addMarker({
+        coords: unibenCoords,
+        content: 'This is your prosent location',
+        icon: "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
+        draggable: true
+    },);
+
+    function addMarker(props){
+        let marker = new google.maps.Marker({
+            position: props.coords,
+            map: map,
+            animation: google.maps.Animation.DROP
+        });
+        let infowindow = new google.maps.InfoWindow();
+
+        if (props.icon) {
+            marker.setIcon(props.icon)
+        }
+
+        if (props.content) {
+            infowindow.setContent(props.content);
+            marker.addListener('click', function() {
+                infoWindow.open(map, marker);
+            });
+        }
+
+        if (props.draggable == true){
+            marker.setDraggable(true);
+        }
+
+        marker.addListener('dragend', function(event) {
+            map.setCenter(event.latLng);
+            geocoder.geocode({location: event.latLng}, (results, status) => {
+                if(status === 'OK'){
+                    map.setZoom(17);
+                    // infowindow.setContent(results[0].formatted_address);
+                    // infowindow.open(map, marker);
+                    $('#searchLocation').val(results[0].formatted_address);
+                }
+            });
+        });
+
+        return marker;
+    }
+
+    function initializeAutoComplete(){
+
+    let input = document.getElementById('searchLocation');
+    let circle = new google.maps.Circle({center: {lat: 6.3931, lng: 5.6195}, radius: 1000});
+    let unibenBounds = circle.getBounds();
+    let autocompleteOptions = {
+    bounds: unibenBounds,
+    types: ['establishment', 'geocode']
+    };
+    autocomplete = new google.maps.places.Autocomplete(input, autocompleteOptions);
+
+
+
+    google.maps.event.addListener(autocomplete, 'place_changed', function(){
+        let place = autocomplete.getPlace();
+        console.log(place.geometry);
+
+        marker.setPosition({lat: place.geometry.location.lat(), lng: place.geometry.location.lng()});
+        map.setCenter({lat: place.geometry.location.lat(), lng: place.geometry.location.lng()});
+        map.setZoom(18);
+
+    });
+    }
+
+}
+
+
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2drX3Dy7lcDVKPEGs8-2UisoHJwlMRj8&libraries=places&callback=initMap"
+  type="text/javascript">
+</script> -->
+{% endblock %}

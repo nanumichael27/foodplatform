@@ -1,0 +1,225 @@
+{% extends "admin/layout/base.html" %}
+
+{% block content %}
+<!-- <div class="row">
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="text-muted">Total Revenue</h5>
+                <div class="metric-value d-inline-block">
+                    <h1 class="mb-1">$12099</h1>
+                </div>
+                <div class="metric-label d-inline-block float-right text-success font-weight-bold">
+                    <span><i class="fa fa-fw fa-arrow-up"></i></span><span>5.86%</span>
+                </div>
+            </div>
+            <div id="sparkline-revenue"></div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="text-muted">Affiliate Revenue</h5>
+                <div class="metric-value d-inline-block">
+                    <h1 class="mb-1">$12099</h1>
+                </div>
+                <div class="metric-label d-inline-block float-right text-success font-weight-bold">
+                    <span><i class="fa fa-fw fa-arrow-up"></i></span><span>5.86%</span>
+                </div>
+            </div>
+            <div id="sparkline-revenue2"></div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="text-muted">Refunds</h5>
+                <div class="metric-value d-inline-block">
+                    <h1 class="mb-1">0.00</h1>
+                </div>
+                <div class="metric-label d-inline-block float-right text-primary font-weight-bold">
+                    <span>N/A</span>
+                </div>
+            </div>
+            <div id="sparkline-revenue3"></div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="text-muted">Avg. Revenue Per User</h5>
+                <div class="metric-value d-inline-block">
+                    <h1 class="mb-1">$28000</h1>
+                </div>
+                <div class="metric-label d-inline-block float-right text-secondary font-weight-bold">
+                    <span>-2.00%</span>
+                </div>
+            </div>
+            <div id="sparkline-revenue4"></div>
+        </div>
+    </div>
+</div> -->
+
+<div class="row">
+    <!-- metric -->
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="text-muted">Customers</h5>
+                <div class="metric-value d-inline-block">
+                    <h1 class="mb-1 text-primary">{{numberOfCustomers}} </h1>
+                </div>
+                <div class="metric-label d-inline-block float-right text-success">
+                    <!-- <i class="fa fa-fw fa-caret-up"></i><span>5.27%</span> -->
+                </div>
+            </div>
+            <div id="sparkline-1"></div>
+        </div>
+    </div>
+    <!-- /. metric -->
+    <!-- metric -->
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="text-muted">Order</h5>
+                <div class="metric-value d-inline-block">
+                    <h1 class="mb-1 text-primary">{{numberOfOrders}} </h1>
+                </div>
+                <div class="metric-label d-inline-block float-right text-danger">
+                    <!-- <i class="fa fa-fw fa-caret-down"></i><span>1.08%</span> -->
+                </div>
+            </div>
+            <div id="sparkline-2"></div>
+        </div>
+    </div>
+    <!-- /. metric -->
+    <!-- metric -->
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="text-muted">Pending Orders</h5>
+                <div class="metric-value d-inline-block">
+                    <h1 class="mb-1 text-primary">{{pendingOrders}}</h1>
+                </div>
+                <div class="metric-label d-inline-block float-right text-danger">
+                    <!-- <i class="fa fa-fw fa-caret-down"></i><span>7.00%</span> -->
+                </div>
+            </div>
+            <div id="sparkline-3">
+            </div>
+        </div>
+    </div>
+    <!-- /. metric -->
+    <!-- metric -->
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="text-muted">Delivered Orders</h5>
+                <div class="metric-value d-inline-block">
+                    <h1 class="mb-1 text-primary">{{deliveredOrders}} </h1>
+                </div>
+                <div class="metric-label d-inline-block float-right text-success">
+                    <!-- <i class="fa fa-fw fa-caret-up"></i><span>4.87%</span> -->
+                </div>
+            </div>
+            <div id="sparkline-4"></div>
+        </div>
+    </div>
+    <!-- /. metric -->
+    <!-- metric -->
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="text-muted">Orders in transit</h5>
+                <div class="metric-value d-inline-block">
+                    <h1 class="mb-1 text-primary">{{transitingOrders}} </h1>
+                </div>
+                <div class="metric-label d-inline-block float-right text-success">
+                    <!-- <i class="fa fa-fw fa-caret-up"></i><span>4.87%</span> -->
+                </div>
+            </div>
+            <div id="sparkline-4"></div>
+        </div>
+    </div>
+    <!-- /. metric -->
+</div>
+
+<div class="row">
+    <!-- ============================================================== -->
+    <!-- sales  -->
+    <!-- ============================================================== -->
+    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+        <div class="card border-3 border-top border-top-primary">
+            <div class="card-body">
+                <h5 class="text-muted">Sales</h5>
+                <div class="metric-value d-inline-block">
+                    <h1 class="mb-1">$12099</h1>
+                </div>
+                <div class="metric-label d-inline-block float-right text-success font-weight-bold">
+                    <span class="icon-circle-small icon-box-xs text-success bg-success-light"><i class="fa fa-fw fa-arrow-up"></i></span><span class="ml-1">5.86%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- end sales  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- new customer  -->
+    <!-- ============================================================== -->
+    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+        <div class="card border-3 border-top border-top-primary">
+            <div class="card-body">
+                <h5 class="text-muted">New Customer</h5>
+                <div class="metric-value d-inline-block">
+                    <h1 class="mb-1">1245</h1>
+                </div>
+                <div class="metric-label d-inline-block float-right text-success font-weight-bold">
+                    <span class="icon-circle-small icon-box-xs text-success bg-success-light"><i class="fa fa-fw fa-arrow-up"></i></span><span class="ml-1">10%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- end new customer  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- visitor  -->
+    <!-- ============================================================== -->
+    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+        <div class="card border-3 border-top border-top-primary">
+            <div class="card-body">
+                <h5 class="text-muted">Visitor</h5>
+                <div class="metric-value d-inline-block">
+                    <h1 class="mb-1">13000</h1>
+                </div>
+                <div class="metric-label d-inline-block float-right text-success font-weight-bold">
+                    <span class="icon-circle-small icon-box-xs text-success bg-success-light"><i class="fa fa-fw fa-arrow-up"></i></span><span class="ml-1">5%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- end visitor  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- total orders  -->
+    <!-- ============================================================== -->
+    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+        <div class="card border-3 border-top border-top-primary">
+            <div class="card-body">
+                <h5 class="text-muted">Total Orders</h5>
+                <div class="metric-value d-inline-block">
+                    <h1 class="mb-1">1340</h1>
+                </div>
+                <div class="metric-label d-inline-block float-right text-danger font-weight-bold">
+                    <span class="icon-circle-small icon-box-xs text-danger bg-danger-light bg-danger-light "><i class="fa fa-fw fa-arrow-down"></i></span><span class="ml-1">4%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- end total orders  -->
+    <!-- ============================================================== -->
+</div>
+{% endblock %}
