@@ -1,1 +1,1 @@
-web: gunicorn karma:app
+web: gunicorn app:app
