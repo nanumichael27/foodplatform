@@ -1,1 +1,1 @@
-web: gunicorn app:karma
+web: gunicorn wsgi:karma
