@@ -18,7 +18,7 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY='dev',
         # DATABASE=os.path.join(app.instance_path, 'karma.sqlite'),
-        SQLALCHEMY_DATABASE_URI='mysql+mysqlconnector://root:''@localhost/karma',
+        SQLALCHEMY_DATABASE_URI='mysql+mysqlconnector://sc09lh1jmmfw8esb:''n205tplh7ep7stmf@grp6m5lz95d9exiz.cbetxkdyhwsb.us-east-1.rds.amazonaws.com/karma',
         SQLALCHEMY_TRACK_MODIFICATIONS=True,
         UPLOAD_FOLDER='uploads',
         
