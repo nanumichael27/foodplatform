@@ -19,7 +19,7 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
         # DATABASE=os.path.join(app.instance_path, 'karma.sqlite'),
         # SQLALCHEMY_DATABASE_URI='mysql+mysqlconnector://root:''@localhost/karma',
-        SQLALCHEMY_DATABASE_URI='mysql+mysqlconnector://b5201101a62227:''3edfad7e@us-cdbr-east-03.cleardb.com/heroku_6abdffec31f00e7?reconnect=true',
+        SQLALCHEMY_DATABASE_URI='mysql+mysqlconnector://b5201101a62227:''3edfad7e@us-cdbr-east-03.cleardb.com/heroku_6abdffec31f00e7',
         SQLALCHEMY_TRACK_MODIFICATIONS=True,
         UPLOAD_FOLDER='uploads',
         
