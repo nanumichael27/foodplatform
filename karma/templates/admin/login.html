@@ -37,7 +37,8 @@
                         {% for message in get_flashed_messages() %}
                             <span class="alert alert-danger">{{ message }}</span>
 						{% endfor %}
-            <div class="card-header text-center"><a href="{{ url_for('admin.login') }}"><img class="logo-img" src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="logo"></a><span class="splash-description">Please enter your user information.</span></div>
+            <!-- <div class="card-header text-center"><a href="{{ url_for('admin.login') }}"><img class="logo-img" src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="logo"></a><span class="splash-description">Please enter your user information.</span></div> -->
+            <div class="card-header text-center"><a href="{{ url_for('admin.login') }}"><h1 style="color: #5969ff;">Admin Login</h1></a><span class="splash-description">Please enter your user information.</span></div>
             <div class="card-body">
                 <form method="POST" action="{{ url_for('admin.login') }}">
                     <div class="form-group">

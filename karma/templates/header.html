@@ -15,7 +15,11 @@
                 </button>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+                    {% if not current_user.is_anonymous %}
                     <ul class="nav navbar-nav menu_nav ml-auto">
+                        
+                        
+                        
                         <li class="nav-item active"><a class="nav-link" href="{{url_for('shop.index')}}">Home</a></li>
                         <li class="nav-item active"><a class="nav-link" href="{{url_for('shop.viewOrders')}}">Orders</a></li>
                         <li class="nav-item submenu dropdown">
@@ -37,7 +41,7 @@
                                 <li class="nav-item"><a class="nav-link" href="single-blog.html">Blog Details</a></li>
                             </ul>
                         </li> -->
-                        <li class="nav-item submenu dropdown">
+                        <!-- <li class="nav-item submenu dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                              aria-expanded="false">Pages</a>
                             <ul class="dropdown-menu">
@@ -45,15 +49,20 @@
                                 <li class="nav-item"><a class="nav-link" href="tracking.html">Tracking</a></li>
                                 <li class="nav-item"><a class="nav-link" href="elements.html">Elements</a></li>
                             </ul>
-                        </li>
-                        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                        </li> -->
+                        <!-- <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li> -->
+                        {% if current_user.is_admin %}
+                        <li class="nav-item"><a class="nav-link" href="{{url_for('admin.dashboard')}}">Admin</a></li>
+                        {% endif %}
+                        <li class="nav-item"><a class="nav-link" href="{{url_for('auth.logout')}}">Logout</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="nav-item"><a href="{{url_for('shop.cart')}}" class="cart"><span class="ti-bag"></span></a></li>
+                        <li class="nav-item"><a href="{{url_for('shop.cart')}}" class="cart"><span class="ti-bag"> Cart</span></a></li>
                         <li class="nav-item">
                             <button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
                         </li>
                     </ul>
+                    {% endif %}
                 </div>
             </div>
         </nav>
