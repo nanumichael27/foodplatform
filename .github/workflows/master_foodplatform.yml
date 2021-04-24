@@ -62,4 +62,4 @@ jobs:
         with:
           app-name: 'foodplatform'
           slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_e8edfc75079a4d62836fd6125f3a73d5 }}
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_1fd10e439e97481b9b7e78ea6a42728c }}
