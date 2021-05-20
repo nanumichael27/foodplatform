@@ -23,6 +23,7 @@ def index():
 @login_required
 def single_product(product_id):
     product = Product.query.get(product_id)
+    product.incrementTimesViewed()
     return render_template('shop/product_single.html', product=product)
 
 @bp.route('/add-to-cart/', methods=('POST',))

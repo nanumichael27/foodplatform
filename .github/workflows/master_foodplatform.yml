@@ -31,6 +31,9 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Migrate database
+      run: flask db migrate
+
+    - name: Upgrade database
       run: flask db upgrade
       
     # Optional: Add step to run tests here (PyTest, Django test suites, etc.)

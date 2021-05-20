@@ -7,6 +7,7 @@ from datetime import datetime
 from flask_login import current_user
 from datetime import datetime
 
+
 class HasImage:
     def storeImage(self):
         pass
@@ -14,30 +15,32 @@ class HasImage:
     def deleteImage(self):
         pass
 
+
 class SavableMixin:
     def save(self):
         db.session.add(self)
         db.session.commit()
 
+
 class Category(db.Model, HasImage):
     category_id = db.Column(
-        db.Integer, 
-        primary_key=True, 
-        nullable=False, 
+        db.Integer,
+        primary_key=True,
+        nullable=False,
         autoincrement=True
-        )
+    )
 
     name = db.Column(
-        db.String(100), 
-        nullable=False, 
+        db.String(100),
+        nullable=False,
         unique=True
-        )
+    )
 
     image = db.Column(
-        db.String(100), 
-        nullable=False, 
+        db.String(100),
+        nullable=False,
         unique=True
-        )
+    )
 
     # products = db.relationship('Product', backref=db.backref('category', lazy=True))
 
@@ -50,39 +53,51 @@ class Category(db.Model, HasImage):
         from karma.admin.views import Image, CATEGORY_URL, PRODUCT_URL
         image = Image(image, CATEGORY_URL)
         self.image = image.create()
-        
+
 
 class Product(db.Model):
     product_id = db.Column(
-        db.Integer, 
-        primary_key=True, 
-        nullable=False, 
+        db.Integer,
+        primary_key=True,
+        nullable=False,
         autoincrement=True
-        )
+    )
     title = db.Column(
         db.String(100)
-        )
+    )
     description = db.Column(
-        db.String(500), 
+        db.String(500),
         nullable=True
-        )
+    )
     price = db.Column(
-        db.Float, 
-        nullable=False, 
+        db.Float,
+        nullable=False,
         default=0.00
-        )
+    )
+    times_bought = db.Column(
+        db.Integer,
+        nullable=False,
+        default=0
+    )
+    views = db.Column(
+        db.Integer,
+        nullable= False,
+        default = 0
+    )
     in_stock = db.Column(
         db.Integer,
         nullable=False,
         default=3
     )
     category_id = db.Column(
-        db.Integer, 
-        db.ForeignKey('category.category_id'), 
+        db.Integer,
+        db.ForeignKey('category.category_id'),
         nullable=False
-        )
+    )
+    
     # images = db.relationship('ProductImage', backref=db.backref('product', lazy=True))
-    category = db.relationship('Category', backref=db.backref('product', lazy=True))
+    category = db.relationship(
+        'Category', backref=db.backref('product', lazy=True))
 
     def addImages(self, images):
         for image in images:
@@ -104,31 +119,40 @@ class Product(db.Model):
         for image in self.images:
             image.delete()
         return True
+    
+    def incrementTimesViewed(self):
+        self.views+=1
+        db.session.add(self)
+        db.session.commit()
 
+    def incrementTimesBought(self, quantity = 1):
+        self.times_bought+=quantity
+        db.session.add(self)
+        db.session.commit()
 
 
 class ProductImage(db.Model):
     image_id = db.Column(
-        db.Integer, 
-        primary_key=True, 
-        nullable=False, 
+        db.Integer,
+        primary_key=True,
+        nullable=False,
         autoincrement=True
-        )
+    )
 
     product_id = db.Column(
         db.Integer,
-        db.ForeignKey('product.product_id'), 
+        db.ForeignKey('product.product_id'),
         nullable=False
-        )
+    )
 
     name = db.Column(
         db.String(100)
-        )
+    )
 
     product = db.relationship(
         'Product',
-         backref=db.backref('images', lazy=True),
-        )
+        backref=db.backref('images', lazy=True),
+    )
 
     def delete(self):
         from karma.admin.views import Image, CATEGORY_URL, PRODUCT_URL
@@ -146,28 +170,28 @@ OrderStatus = {
 
 class Order(db.Model):
     order_id = db.Column(
-        db.Integer, 
-        primary_key=True, 
-        nullable=False, 
+        db.Integer,
+        primary_key=True,
+        nullable=False,
         autoincrement=True
-        )
+    )
 
     status = db.Column(
         db.String(15),
         nullable=False,
         default=OrderStatus['PENDING']
     )
-    
+
     date_created = db.Column(
-        db.DateTime, 
-        nullable=False, 
+        db.DateTime,
+        nullable=False,
         default=datetime.now
     )
 
     user_id = db.Column(
         db.Integer,
         db.ForeignKey('user.user_id'),
-        nullable = False
+        nullable=False
     )
 
     user = db.relationship(
@@ -207,18 +231,19 @@ class Order(db.Model):
                 quantity=item.quantity,
                 total=item.total
             )
+            item.product.incrementTimesBought(item.quantity)
             self.orderitems.append(newItem)
             self.updateTotal()
-    
+
     def updateTotal(self):
         self.total = current_user.cart[0].total
-    
+
 
 class OrderItem(db.Model):
     order_item_id = db.Column(
-        db.Integer, 
-        primary_key=True, 
-        nullable=False, 
+        db.Integer,
+        primary_key=True,
+        nullable=False,
         autoincrement=True
     )
 
@@ -241,7 +266,7 @@ class OrderItem(db.Model):
 
     product = db.relationship(
         'Product',
-        uselist = False
+        uselist=False
     )
 
     quantity = db.Column(
@@ -258,7 +283,6 @@ class OrderItem(db.Model):
 
     def calculateTotal(self):
         return self.product.price*self.quantity
-        
 
     def updateTotal(self):
         self.total = self.calculateTotal()
@@ -274,22 +298,22 @@ class Cart(db.Model, SavableMixin):
         print('cart created')
 
     cart_id = db.Column(
-        db.Integer, 
-        primary_key=True, 
-        nullable=False, 
+        db.Integer,
+        primary_key=True,
+        nullable=False,
         autoincrement=True
     )
 
     user_id = db.Column(
         db.Integer,
         db.ForeignKey('user.user_id'),
-        nullable = False,
+        nullable=False,
     )
 
     user = db.relationship(
         'User',
-        backref = 'cart',
-        uselist = True,
+        backref='cart',
+        uselist=True,
     )
 
     total = db.Column(
@@ -309,11 +333,11 @@ class Cart(db.Model, SavableMixin):
             if str(product.product_id) == str(item.product_id):
                 return product
 
-
     def addItem(self, item):
         if(self.itemExists(item)):
             existingItem = self.retrieveItem(item)
-            existingItem.quantity = int(existingItem.quantity) + int(item.quantity)
+            existingItem.quantity = int(
+                existingItem.quantity) + int(item.quantity)
             print(
                 """
                 This item already exists
@@ -325,16 +349,16 @@ class Cart(db.Model, SavableMixin):
         return True
 
     def calculateTotal(self):
-        total=0
+        total = 0
         for item in self.items:
-            total+= item.total
+            total += item.total
         return total
 
     def updateTotal(self):
         self.total = self.calculateTotal()
         self.save()
         return True
-    
+
     def clear(self):
         self.total = 0
         for item in self.items:
@@ -350,9 +374,9 @@ class CartItem(db.Model, SavableMixin):
         # print('cart item created')
 
     cart_item_id = db.Column(
-        db.Integer, 
-        primary_key=True, 
-        nullable=False, 
+        db.Integer,
+        primary_key=True,
+        nullable=False,
         autoincrement=True
     )
 
@@ -370,7 +394,7 @@ class CartItem(db.Model, SavableMixin):
 
     product = db.relationship(
         'Product',
-        uselist = False
+        uselist=False
     )
 
     cart = db.relationship(
@@ -385,14 +409,14 @@ class CartItem(db.Model, SavableMixin):
     )
 
     total = db.Column(
-            db.Float,
-            nullable = False,
-            default = 0,
+        db.Float,
+        nullable=False,
+        default=0,
     )
-    
+
     def calculateTotal(self):
         return self.product.price*self.quantity
-        
+
     def updateTotal(self):
         self.total = self.calculateTotal()
         self.save()
@@ -401,11 +425,12 @@ class CartItem(db.Model, SavableMixin):
     def delete(self):
         db.session.delete(self)
 
+
 class Location(db.Model):
     location_id = db.Column(
-        db.Integer, 
-        primary_key=True, 
-        nullable=False, 
+        db.Integer,
+        primary_key=True,
+        nullable=False,
         autoincrement=True
     )
 
@@ -440,16 +465,19 @@ class Location(db.Model):
         backref=db.backref('location', lazy=True)
     )
 
+
 PaymentStatus = {
     'PENDING': 'pending',
     'PROCESSING': 'processing',
     'SUCCESSFUL': 'successful'
 }
+
+
 class Payment(db.Model):
     payment_id = db.Column(
-        db.Integer, 
-        primary_key=True, 
-        nullable=False, 
+        db.Integer,
+        primary_key=True,
+        nullable=False,
         autoincrement=True
     )
 
@@ -459,14 +487,14 @@ class Payment(db.Model):
     )
 
     date_created = db.Column(
-        db.DateTime, 
-        nullable=False, 
+        db.DateTime,
+        nullable=False,
         default=datetime.now
     )
 
     date_updated = db.Column(
-        db.DateTime, 
-        nullable=False, 
+        db.DateTime,
+        nullable=False,
         default=datetime.now,
         onupdate=datetime.now,
     )
@@ -476,10 +504,8 @@ class Payment(db.Model):
         nullable=False,
         default=False,
     )
-    
+
     refrence = db.Column(
         db.String(150),
         nullable=True,
     )
-
-
