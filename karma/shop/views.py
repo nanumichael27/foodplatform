@@ -8,7 +8,7 @@ from flask_login import login_required, current_user
 from karma import db
 from .models import Category, Product, ProductImage, CartItem, Order, Location
 import json
-
+from sqlalchemy import desc
 bp = Blueprint('shop', __name__)
 
 
@@ -17,7 +17,8 @@ bp = Blueprint('shop', __name__)
 def index():
     products = Product.query.all()
     products.reverse()
-    return render_template('shop/index.html', products=products)
+    recommended = Product.query.order_by(desc(Product.views)).limit(2)
+    return render_template('shop/index.html', products=products, recommended=recommended)
 
 @bp.route('/product/<int:product_id>/')
 @login_required
